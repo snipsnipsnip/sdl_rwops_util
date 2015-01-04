@@ -1,0 +1,12 @@
+{
+  "name": "sdl_rwops_util",
+  "version": "0.0.0",
+  "repo": "snipsnipsnip/sdl_rwops_util",
+  "description": "getc, gets, slurp for SDL_RWops",
+  "keywords": ["sdl", "io", "util"],
+  "dependencies": {
+    "dhobsd/vstring": "0.0.2"
+  },
+  "license": "zlib",
+  "src": ["sdl_rwops_util.c", "sdl_rwops_util.h"]
+}
