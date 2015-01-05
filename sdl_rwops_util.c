@@ -1,4 +1,12 @@
 #include "sdl_rwops_util.h"
+#include "vstring.h"
+#include "SDL_RWops.h"
+
+/*
+ * sdl_rwops_util.c
+ * Copyright (c) 2014 snipsnipsnip
+ * zlib license
+ */
 
 int sdl_rwops_util_getc(SDL_RWops *rw)
 {
