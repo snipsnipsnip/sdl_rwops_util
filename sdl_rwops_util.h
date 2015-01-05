@@ -39,7 +39,8 @@ int sdl_rwops_util_getc(SDL_RWops *rw);
  * Reads buffer till '\n' appears.
  * '\n' and '\r' at the end of the line (if any) will be removed.
  * Note that you won't get contents after '\0' since this function use C string.
- * returns NULL on failure or EOF.
+ * Returns string allocated by SDL_malloc().
+ * Returns NULL on failure or EOF.
  */
 SDL_RWOPS_UTIL_API
 const char *sdl_rwops_util_gets(SDL_RWops *rw);
@@ -48,7 +49,8 @@ const char *sdl_rwops_util_gets(SDL_RWops *rw);
  * Reads the whole remaining content from SDL_RWops.
  * Reads buffer till EOF appears.
  * Note that you won't get contents after '\0' since this function use C string.
- * returns NULL on failure or EOF.
+ * Returns string allocated by SDL_malloc().
+ * Returns NULL on failure or EOF.
  */
 SDL_RWOPS_UTIL_API
 const char *sdl_rwops_util_slurp(SDL_RWops *rw);

@@ -16,7 +16,7 @@ int sdl_rwops_util_getc(SDL_RWops *rw)
 
 vstring *sdl_rwops_util_gets_v(SDL_RWops *rw, vstring *s)
 {
-    Uint16 initial_pointer = s->pointer;
+    Uint64 initial_pointer = s->pointer;
 
     for (;;)
     {
@@ -104,47 +104,28 @@ vstring *sdl_rwops_util_slurp_v(SDL_RWops *rw, vstring *s)
     return s;
 }
 
-const char *sdl_rwops_util_gets(SDL_RWops *rw)
+static const char *wrap_vs_func(SDL_RWops *rw, vstring *(*func)(SDL_RWops *rw, vstring *s))
 {
     vstring s;
     vstring_malloc m = { SDL_malloc, SDL_realloc, SDL_free };
 
-    if (vs_init(&s, &m, VS_TYPE_DYNAMIC, NULL, 1) == NULL)
+    if (vs_init(&s, &m, VS_TYPE_DYNAMIC, NULL, 1) == NULL ||
+        func(rw, &s) == NULL ||
+        !vs_finalize(&s))
     {
-        return NULL;
-    }
-    if (sdl_rwops_util_gets_v(rw, &s) == NULL)
-    {
-        return NULL;
-    }
-
-    if (!vs_finalize(&s))
-    {
+        vs_deinit(&s);
         return NULL;
     }
 
     return s.contents;
 }
 
+const char *sdl_rwops_util_gets(SDL_RWops *rw)
+{
+    return wrap_vs_func(rw, sdl_rwops_util_gets_v);
+}
+
 const char *sdl_rwops_util_slurp(SDL_RWops *rw)
 {
-    vstring s;
-    vstring_malloc m = { SDL_malloc, SDL_realloc, SDL_free };
-
-    if (vs_init(&s, &m, VS_TYPE_DYNAMIC, NULL, 1) == NULL)
-    {
-        return NULL;
-    }
-
-    if (sdl_rwops_util_slurp_v(rw, &s) == NULL)
-    {
-        return NULL;
-    }
-
-    if (!vs_finalize(&s))
-    {
-        return NULL;
-    }
-
-    return s.contents;
+    return wrap_vs_func(rw, sdl_rwops_util_slurp_v);
 }
